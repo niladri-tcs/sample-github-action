@@ -1,0 +1,24 @@
+name: Build and Publish image to Docker Hub
+on:
+  [workflow_dispatch]
+  # [push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'api/Dockerfile'
+  #     - 'front-end-nextjs/Dockerfile']
+
+jobs:
+  publish_images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build image
+        run: |
+          docker build ./api/ -t rndockerhub/devops-qr-code-backend:latest
+
+      - name: push image to docker hub
+        run: |
+          docker login -u rndockerhub -p ${{ secrets.DOCKER_HUB_TOKEN }}
+          docker push rndockerhub/devops-qr-code-backend:latest
